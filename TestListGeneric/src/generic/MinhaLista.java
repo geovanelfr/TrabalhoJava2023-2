@@ -2,12 +2,12 @@ package generic;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class MinhaLista <E extends IExibirInformacoes & IChaveConsulta<K>, K> implements Collection<E>, List<E>{
+public class MinhaLista<E extends IExibirInformacoes & IChaveConsulta> implements List<E> {
     
     private List<E> lista = new ArrayList<>();
     
@@ -126,65 +126,54 @@ public class MinhaLista <E extends IExibirInformacoes & IChaveConsulta<K>, K> im
         return lista.subList(fromIndex, toIndex);
     }
     
-     public void exibirLista() {
+     // Implemente todas as demais operações da interface List
+
+    public void exibirLista() {
         for (E elemento : lista) {
-            elemento.exibirInformacoes();
+            System.out.println(elemento.exibirInformacoes());
         }
     }
 
     public void exibirListaOrdenada() {
-        List<E> copiaOrdenada = new ArrayList<>(lista);
-        copiaOrdenada.sort(Comparator.comparing(E::getChave));
-        for (E elemento : copiaOrdenada) {
-            elemento.exibirInformacoes();
-        }
+        Collections.sort(lista);
+        exibirLista();
+        
     }
 
-        public void ordenarLista() {
-            lista.sort(Comparator.comparing(E::getChave));
-        }
+    public void ordenar() {
+        Collections.sort(lista);
+    }
 
-        public void ordenarListaDecrescente() {
-            lista.sort(Comparator.comparing(E::getChave).reversed());
-        }
+    public void ordenarDecrescente() {
+        Collections.sort(lista, Collections.reverseOrder());
+    }
 
-    public E pesquisar(K chaveBusca) {
+    public E pesquisar(Object chaveBusca) {
         for (E elemento : lista) {
-            if (elemento.getChave().equals(chaveBusca)) {
+            if (elemento.chaveConsulta().equals(chaveBusca)){
                 return elemento;
             }
         }
-        return null; // Ou lançar uma exceção se não encontrar
+        return null;
     }
 
-    public MinhaLista<E, K> pesquisarPorVariasChaves(List<K> chavesBusca) {
-        MinhaLista<E, K> resultado = new MinhaLista<>();
-        for (K chave : chavesBusca) {
-            E elemento = pesquisar(chave);
-            if (elemento != null) {
-                resultado.add(elemento);
-            }
-        }
-        return resultado;
+    public E pesquisarPorVariasChaves(Object chaveBusca) {
+        // Implemente a lógica para pesquisar por várias chaves
+        return null; // Altere para retornar o elemento encontrado
     }
 
-    public MinhaLista<E, K> filtrar(K chaveBusca) {
-        MinhaLista<E, K> resultado = new MinhaLista<>();
+    public MinhaLista<E> filtrar(Object chaveBusca) {
+        MinhaLista<E> resultado = new MinhaLista<>();
         for (E elemento : lista) {
-            if (elemento.getChave().equals(chaveBusca)) {
+            if (elemento.chaveConsulta().equals(chaveBusca)) {
                 resultado.add(elemento);
             }
         }
         return resultado;
     }
 
-    public MinhaLista<E, K> filtrarPorVariasChaves(List<K> chavesBusca) {
-        MinhaLista<E, K> resultado = new MinhaLista<>();
-        for (E elemento : lista) {
-            if (chavesBusca.contains(elemento.getChave())) {
-                resultado.add(elemento);
-            }
-        }
-        return resultado;
+    public MinhaLista<E> filtrarPorVariaChaves(Object chaveBusca) {
+        // Implemente a lógica para filtrar a lista por várias chaves
+        return null; // Altere para retornar a sublista
     }
 }
